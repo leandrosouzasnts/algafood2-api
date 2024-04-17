@@ -1,13 +1,12 @@
 package algafood2api.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Data
 @Entity
 public class Restaurante {
 
@@ -19,16 +18,6 @@ public class Restaurante {
 
     private BigDecimal taxaFrete;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Restaurante that = (Restaurante) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
+    @ManyToOne
+    private Cozinha cozinha;
 }
