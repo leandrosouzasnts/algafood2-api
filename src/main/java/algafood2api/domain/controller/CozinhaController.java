@@ -1,9 +1,11 @@
 package algafood2api.domain.controller;
 
+import algafood2api.domain.exceptions.EntidadeNaoEncontradaException;
 import algafood2api.domain.model.Cozinha;
 import algafood2api.domain.repository.CozinhaRepository;
 import algafood2api.domain.service.CozinhaService;
 import lombok.Data;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,24 +47,22 @@ public class CozinhaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Cozinha> update(@PathVariable Long id, @RequestBody Cozinha model){
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
-
-        if (cozinha.isPresent()) {
-           cozinha.get().setNome(model.getNome());
-           return ResponseEntity.ok(cozinhaRepository.save(cozinha.get()));
-        }  else {
+        try {
+            return ResponseEntity.ok(cozinhaService.atualizar(id, model));
+        }catch (EntidadeNaoEncontradaException ex) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
-        if (cozinha.isPresent()){
-            cozinhaRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
+        try {
+            cozinhaService.remover(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException ex) {
             return ResponseEntity.notFound().build();
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 }
