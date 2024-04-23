@@ -1,16 +1,21 @@
 package algafood2api.domain.controller;
 
 import algafood2api.domain.exceptions.EntidadeNaoEncontradaException;
+import algafood2api.domain.model.Cozinha;
 import algafood2api.domain.model.Restaurante;
 import algafood2api.domain.service.RestauranteService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -58,5 +63,31 @@ public class RestauranteController {
     public ResponseEntity<Void> remover(@PathVariable Long id){
         restauranteService.remover(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Restaurante> atualizarParcialmente(@PathVariable Long id, @RequestBody Map<String, Object> campos){
+        try {
+            Restaurante restaurante = restauranteService.buscarPorId(id);
+
+            merge(campos, restaurante);
+
+            return adicionar(restaurante);
+        } catch (EntidadeNaoEncontradaException ex ){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    private void merge(Map<String, Object> campos, Restaurante restaurante){
+        ObjectMapper objectMapper = new ObjectMapper();
+        Restaurante origem = objectMapper.convertValue(campos, Restaurante.class);
+
+        campos.forEach((property, value) -> {
+            Field field = ReflectionUtils.findField(Restaurante.class, property);
+            field.setAccessible(true);
+
+            Object valor = ReflectionUtils.getField(field, origem);
+            ReflectionUtils.setField(field, restaurante, valor);
+        });
     }
 }
