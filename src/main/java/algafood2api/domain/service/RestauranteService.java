@@ -65,4 +65,12 @@ public class RestauranteService {
         restaurante.setId(id);
         return adicionar(restaurante);
     }
+
+    public List<Restaurante> getTop2(String nome){
+        return restauranteRepository.getTop2ByNomeContaining(nome);
+    }
+
+    public int countByCozinhaId(Long id){
+        return restauranteRepository.countByCozinhaId(id);
+    }
 }

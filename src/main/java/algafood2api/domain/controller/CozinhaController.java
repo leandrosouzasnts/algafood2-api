@@ -70,4 +70,9 @@ public class CozinhaController {
     public ResponseEntity<List<Cozinha>> buscarPorNome(@RequestParam("nome") String nome){
         return ResponseEntity.ok(cozinhaService.buscarPorNome(nome));
     }
+
+    @GetMapping("/existe-nome")
+    public ResponseEntity<Boolean> existsCozinha(@RequestParam("nome") String nome){
+        return ResponseEntity.ok(cozinhaRepository.existsByNomeContaining(nome));
+    }
 }

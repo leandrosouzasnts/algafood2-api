@@ -90,4 +90,14 @@ public class RestauranteController {
             ReflectionUtils.setField(field, restaurante, valor);
         });
     }
+
+    @GetMapping("/top2-nome")
+    public ResponseEntity<List<Restaurante>> getTop2(@RequestParam("nome") String nome){
+        return ResponseEntity.ok(restauranteService.getTop2(nome));
+    }
+    @GetMapping("/count-cozinha")
+    public ResponseEntity<Integer> countByCozinha(@RequestParam("id") Long id){
+        return ResponseEntity.ok(restauranteService.countByCozinhaId(id));
+    }
+
 }
