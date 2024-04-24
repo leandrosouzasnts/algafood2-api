@@ -73,4 +73,8 @@ public class RestauranteService {
     public int countByCozinhaId(Long id){
         return restauranteRepository.countByCozinhaId(id);
     }
+
+    public List<Restaurante> buscaRestaurantesComFreteECozinhaY(Long cozinhaId){
+        return restauranteRepository.buscaRestaurantesComFreteECozinhaY(cozinhaId);
+    }
 }

@@ -95,9 +95,15 @@ public class RestauranteController {
     public ResponseEntity<List<Restaurante>> getTop2(@RequestParam("nome") String nome){
         return ResponseEntity.ok(restauranteService.getTop2(nome));
     }
+
     @GetMapping("/count-cozinha")
     public ResponseEntity<Integer> countByCozinha(@RequestParam("id") Long id){
         return ResponseEntity.ok(restauranteService.countByCozinhaId(id));
+    }
+
+    @GetMapping("/comValorFrete-cozinha")
+    public ResponseEntity<List<Restaurante>> getComValorFrenteECozinha(@RequestParam("id") Long id){
+        return ResponseEntity.ok(restauranteService.buscaRestaurantesComFreteECozinhaY(id));
     }
 
 }
