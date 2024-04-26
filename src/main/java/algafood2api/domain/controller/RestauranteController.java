@@ -3,6 +3,7 @@ package algafood2api.domain.controller;
 import algafood2api.domain.exceptions.EntidadeNaoEncontradaException;
 import algafood2api.domain.model.Cozinha;
 import algafood2api.domain.model.Restaurante;
+import algafood2api.domain.repository.RestauranteRepository;
 import algafood2api.domain.service.RestauranteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.coyote.Response;
@@ -14,6 +15,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,9 @@ public class RestauranteController {
 
     @Autowired
     private RestauranteService restauranteService;
+
+    @Autowired
+    private RestauranteRepository restauranteRepository;
 
     @GetMapping
     public ResponseEntity<List<Restaurante>> listarTodos(){
@@ -104,6 +109,11 @@ public class RestauranteController {
     @GetMapping("/comValorFrete-cozinha")
     public ResponseEntity<List<Restaurante>> getComValorFrenteECozinha(@RequestParam("id") Long id){
         return ResponseEntity.ok(restauranteService.buscaRestaurantesComFreteECozinhaY(id));
+    }
+
+    @GetMapping("/com-intervalo-frete")
+    public ResponseEntity<List<Restaurante>> buscarComIntervalo(BigDecimal taxaInicial, BigDecimal taxaFinal){
+        return ResponseEntity.ok(restauranteRepository.buscaPorIntervalo(taxaInicial, taxaFinal));
     }
 
 }
