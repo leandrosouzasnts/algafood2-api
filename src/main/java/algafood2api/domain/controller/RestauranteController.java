@@ -1,12 +1,12 @@
 package algafood2api.domain.controller;
 
 import algafood2api.domain.exceptions.EntidadeNaoEncontradaException;
-import algafood2api.domain.model.Cozinha;
 import algafood2api.domain.model.Restaurante;
 import algafood2api.domain.repository.RestauranteRepository;
 import algafood2api.domain.service.RestauranteService;
+import algafood2api.infrastructure.repository.spec.RestauranteComFreteGratis;
+import algafood2api.infrastructure.repository.spec.RestauranteComNomeSemelhante;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -116,4 +116,12 @@ public class RestauranteController {
         return ResponseEntity.ok(restauranteRepository.buscaPorIntervalo(taxaInicial, taxaFinal));
     }
 
+    @GetMapping("/com-frete-gratis")
+    public ResponseEntity<List<Restaurante>> buscarComFreteGratis(BigDecimal taxaInicial, String nome){
+
+        RestauranteComFreteGratis restauranteComFreteGratis = new RestauranteComFreteGratis();
+        RestauranteComNomeSemelhante restauranteComNomeSemelhante = new RestauranteComNomeSemelhante(nome);
+
+        return ResponseEntity.ok(restauranteRepository.findAll(restauranteComFreteGratis.and(restauranteComNomeSemelhante)));
+    }
 }
