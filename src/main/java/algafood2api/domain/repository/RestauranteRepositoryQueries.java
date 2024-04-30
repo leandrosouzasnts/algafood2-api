@@ -8,4 +8,6 @@ import java.util.List;
 public interface RestauranteRepositoryQueries {
 
     public List<Restaurante> buscaPorIntervalo(BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
+
+    public List<Restaurante> buscaComFreteGratis(String nome);
 }

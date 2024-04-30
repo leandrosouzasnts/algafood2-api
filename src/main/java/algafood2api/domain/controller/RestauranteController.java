@@ -120,10 +120,6 @@ public class RestauranteController {
 
     @GetMapping("/com-frete-gratis")
     public ResponseEntity<List<Restaurante>> buscarComFreteGratis(BigDecimal taxaInicial, String nome){
-
-        RestauranteComFreteGratis restauranteComFreteGratis = new RestauranteComFreteGratis();
-        RestauranteComNomeSemelhante restauranteComNomeSemelhante = new RestauranteComNomeSemelhante(nome);
-
-        return ResponseEntity.ok(restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome))));
+        return ResponseEntity.ok(restauranteRepository.buscaComFreteGratis(nome));
     }
 }
