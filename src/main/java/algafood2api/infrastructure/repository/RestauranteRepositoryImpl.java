@@ -1,6 +1,7 @@
 package algafood2api.infrastructure.repository;
 
 import algafood2api.domain.model.Restaurante;
+import algafood2api.domain.repository.RestauranteRepository;
 import algafood2api.domain.repository.RestauranteRepositoryQueries;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -9,17 +10,24 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static algafood2api.infrastructure.repository.spec.RestauranteSpecs.*;
+
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired @Lazy //Indica que só deve ser injetado no ato do uso
+    private RestauranteRepository restauranteRepository;
 
 //    @Override
 //    public List<Restaurante> buscaPorIntervalo(BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
@@ -55,5 +63,10 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
         TypedQuery<Restaurante> query = entityManager.createQuery(criteriaQuery);
         return query.getResultList();
+    }
+
+    @Override
+    public List<Restaurante> buscaComFreteGratis(String nome) {
+        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
     }
 }
