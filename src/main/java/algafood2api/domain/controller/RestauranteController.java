@@ -4,8 +4,6 @@ import algafood2api.domain.exceptions.EntidadeNaoEncontradaException;
 import algafood2api.domain.model.Restaurante;
 import algafood2api.domain.repository.RestauranteRepository;
 import algafood2api.domain.service.RestauranteService;
-import algafood2api.infrastructure.repository.spec.RestauranteComFreteGratis;
-import algafood2api.infrastructure.repository.spec.RestauranteComNomeSemelhante;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,8 +16,6 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-
-import static algafood2api.infrastructure.repository.spec.RestauranteSpecs.*;
 
 @RestController
 @RequestMapping("/restaurantes")
