@@ -19,6 +19,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import static algafood2api.infrastructure.repository.spec.RestauranteSpecs.*;
+
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
@@ -122,6 +124,6 @@ public class RestauranteController {
         RestauranteComFreteGratis restauranteComFreteGratis = new RestauranteComFreteGratis();
         RestauranteComNomeSemelhante restauranteComNomeSemelhante = new RestauranteComNomeSemelhante(nome);
 
-        return ResponseEntity.ok(restauranteRepository.findAll(restauranteComFreteGratis.and(restauranteComNomeSemelhante)));
+        return ResponseEntity.ok(restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome))));
     }
 }
