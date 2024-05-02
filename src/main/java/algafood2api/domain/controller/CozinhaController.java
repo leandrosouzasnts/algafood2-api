@@ -2,6 +2,7 @@ package algafood2api.domain.controller;
 
 import algafood2api.domain.exceptions.EntidadeNaoEncontradaException;
 import algafood2api.domain.model.Cozinha;
+import algafood2api.domain.model.Restaurante;
 import algafood2api.domain.repository.CozinhaRepository;
 import algafood2api.domain.service.CozinhaService;
 import lombok.Data;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,5 +76,10 @@ public class CozinhaController {
     @GetMapping("/existe-nome")
     public ResponseEntity<Boolean> existsCozinha(@RequestParam("nome") String nome){
         return ResponseEntity.ok(cozinhaRepository.existsByNomeContaining(nome));
+    }
+
+    @GetMapping("/first")
+    public ResponseEntity<Cozinha> buscarPrimeiro(){
+        return ResponseEntity.ok(cozinhaRepository.findFirst().get());
     }
 }

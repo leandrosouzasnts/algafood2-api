@@ -118,4 +118,9 @@ public class RestauranteController {
     public ResponseEntity<List<Restaurante>> buscarComFreteGratis(BigDecimal taxaInicial, String nome){
         return ResponseEntity.ok(restauranteRepository.buscaComFreteGratis(nome));
     }
+
+    @GetMapping("/first")
+    public ResponseEntity<Restaurante> buscarPrimeiro(){
+        return ResponseEntity.ok(restauranteRepository.findFirst().get());
+    }
 }

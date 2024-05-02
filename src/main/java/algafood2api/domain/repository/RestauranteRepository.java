@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RestauranteRepository extends JpaRepository<Restaurante, Long>,
+public interface RestauranteRepository extends CustomRepository<Restaurante, Long>,
         RestauranteRepositoryQueries, JpaSpecificationExecutor<Restaurante> {
 
     List<Restaurante> getTop2ByNomeContaining(String nome);
