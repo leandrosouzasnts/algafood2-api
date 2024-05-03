@@ -1,9 +1,11 @@
 package algafood2api.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -13,4 +15,8 @@ public class Cozinha {
     private Long id;
 
     private String nome;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cozinha")
+    private List<Restaurante> restaurantes = new ArrayList<>();
 }

@@ -6,9 +6,11 @@ import algafood2api.domain.model.Restaurante;
 import algafood2api.domain.repository.CozinhaRepository;
 import algafood2api.domain.repository.RestauranteRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +49,7 @@ public class RestauranteService {
         Optional<Cozinha> cozinha = cozinhaRepository.findById(restaurante.getCozinha().getId());
         if(cozinha.isEmpty()) {
             throw new DataIntegrityViolationException("Cozinha não existente");
+
         }
         restaurante.setCozinha(cozinha.get());
         return restauranteRepository.save(restaurante);
@@ -59,6 +62,9 @@ public class RestauranteService {
 
     public Restaurante atualizar(Long id, Restaurante model){
         Restaurante restaurante = buscarRestaurante(id);
+
+        TypeMap<Restaurante, Restaurante> typeMap = modelMapper.createTypeMap(Restaurante.class, Restaurante.class);
+        typeMap.addMapping(src -> null, Restaurante::setFormaPagamento);
 
         modelMapper.map(model, restaurante);
 

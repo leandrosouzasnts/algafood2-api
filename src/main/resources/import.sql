@@ -11,4 +11,4 @@ INSERT INTO algafood2.estado (id, nome) VALUES(1, "São Paulo");
 INSERT INTO algafood2.cidade (id, nome, estado_id) VALUES(1, "Assis", 1);
 
 
-
+INSERT INTO algafood2.restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) values (1,1), (2,2), (1,2), (2,1);
