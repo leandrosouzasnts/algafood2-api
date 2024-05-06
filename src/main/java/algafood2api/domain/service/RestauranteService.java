@@ -10,7 +10,6 @@ import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +64,8 @@ public class RestauranteService {
 
         TypeMap<Restaurante, Restaurante> typeMap = modelMapper.createTypeMap(Restaurante.class, Restaurante.class);
         typeMap.addMapping(src -> null, Restaurante::setFormaPagamento);
+        typeMap.addMapping(src -> null, Restaurante::setEndereco);
+        typeMap.addMapping(src -> null, Restaurante::setDataCadastro);
 
         modelMapper.map(model, restaurante);
 
