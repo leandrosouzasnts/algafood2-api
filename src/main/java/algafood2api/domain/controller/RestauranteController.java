@@ -5,6 +5,8 @@ import algafood2api.domain.model.Restaurante;
 import algafood2api.domain.repository.RestauranteRepository;
 import algafood2api.domain.service.RestauranteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,8 @@ public class RestauranteController {
     @Autowired
     private RestauranteRepository restauranteRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(RestauranteController.class);
+
     @GetMapping
     public ResponseEntity<List<Restaurante>> listarTodos(){
         return ResponseEntity.ok(restauranteService.buscarTodos());
@@ -47,6 +51,7 @@ public class RestauranteController {
             Restaurante restaurante = restauranteService.adicionar(model);
             return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
         } catch (DataIntegrityViolationException ex){
+            logger.info(ex.getMessage());
             return ResponseEntity.status(409).build();
         }
     }

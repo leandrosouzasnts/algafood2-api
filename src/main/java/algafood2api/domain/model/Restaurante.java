@@ -37,8 +37,8 @@ public class Restaurante {
     private LocalDateTime dataCadastro;
 
     @JsonIgnore
-    @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "datetime")
+    //@UpdateTimestamp
+    @Column(columnDefinition = "datetime")
     private LocalDateTime dataAtualizacao;
 
     @JsonIgnore
@@ -46,4 +46,10 @@ public class Restaurante {
     @JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"),
     inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private List<FormaPagamento> formaPagamento = new ArrayList<>();
+
+    @PreUpdate
+    public void setLastUpdate(){
+        this.dataAtualizacao = LocalDateTime.now();
+    }
+
 }
