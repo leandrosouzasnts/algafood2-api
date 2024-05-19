@@ -2,7 +2,6 @@ package algafood2api.domain.controller;
 
 import algafood2api.domain.exceptions.EntidadeNaoEncontradaException;
 import algafood2api.domain.model.Cozinha;
-import algafood2api.domain.model.Restaurante;
 import algafood2api.domain.repository.CozinhaRepository;
 import algafood2api.domain.service.CozinhaService;
 import lombok.Data;
@@ -12,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,12 +25,12 @@ public class CozinhaController {
     private final CozinhaService cozinhaService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Cozinha>> findAll(){
+    public ResponseEntity<List<Cozinha>> findAll() {
         return ResponseEntity.ok(cozinhaRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cozinha> findById(@PathVariable Long id){
+    public ResponseEntity<Cozinha> findById(@PathVariable Long id) {
         Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
 
         if (cozinha.isPresent()) {
@@ -43,15 +41,15 @@ public class CozinhaController {
     }
 
     @PostMapping
-    public ResponseEntity<Cozinha> adicionar(@RequestBody Cozinha model){
+    public ResponseEntity<Cozinha> adicionar(@RequestBody Cozinha model) {
         return ResponseEntity.status(HttpStatus.CREATED).body(cozinhaService.salvar(model));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cozinha> update(@PathVariable Long id, @RequestBody Cozinha model){
+    public ResponseEntity<Cozinha> update(@PathVariable Long id, @RequestBody Cozinha model) {
         try {
             return ResponseEntity.ok(cozinhaService.atualizar(id, model));
-        }catch (EntidadeNaoEncontradaException ex) {
+        } catch (EntidadeNaoEncontradaException ex) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -69,17 +67,17 @@ public class CozinhaController {
     }
 
     @GetMapping("/por-nome")
-    public ResponseEntity<List<Cozinha>> buscarPorNome(@RequestParam("nome") String nome){
+    public ResponseEntity<List<Cozinha>> buscarPorNome(@RequestParam("nome") String nome) {
         return ResponseEntity.ok(cozinhaService.buscarPorNome(nome));
     }
 
     @GetMapping("/existe-nome")
-    public ResponseEntity<Boolean> existsCozinha(@RequestParam("nome") String nome){
+    public ResponseEntity<Boolean> existsCozinha(@RequestParam("nome") String nome) {
         return ResponseEntity.ok(cozinhaRepository.existsByNomeContaining(nome));
     }
 
     @GetMapping("/first")
-    public ResponseEntity<Cozinha> buscarPrimeiro(){
+    public ResponseEntity<Cozinha> buscarPrimeiro() {
         return ResponseEntity.ok(cozinhaRepository.findFirst().get());
     }
 }
