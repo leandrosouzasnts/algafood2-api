@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,6 +24,8 @@ public class Restaurante {
 
     //@JsonIgnore
     @ManyToOne
+    //@JsonIgnoreProperties("hibernateLazyInitializer")
+    @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
 
     @JsonIgnore
@@ -44,11 +45,11 @@ public class Restaurante {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"),
-    inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
+            inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private List<FormaPagamento> formaPagamento = new ArrayList<>();
 
     @PreUpdate
-    public void setLastUpdate(){
+    public void setLastUpdate() {
         this.dataAtualizacao = LocalDateTime.now();
     }
 

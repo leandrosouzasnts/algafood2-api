@@ -26,27 +26,27 @@ public class RestauranteService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private Restaurante buscarRestaurante(Long id){
+    private Restaurante buscarRestaurante(Long id) {
         Optional<Restaurante> restaurante = restauranteRepository.findById(id);
 
-        if (restaurante.isPresent()){
+        if (restaurante.isPresent()) {
             return restaurante.get();
         } else {
             throw new EntidadeNaoEncontradaException("Restaurante não encontrado");
         }
     }
 
-    public List<Restaurante> buscarTodos(){
-        return restauranteRepository.findAll();
+    public List<Restaurante> buscarTodos() {
+        return restauranteRepository.buscarTodos();
     }
 
-    public Restaurante buscarPorId(Long id){
+    public Restaurante buscarPorId(Long id) {
         return buscarRestaurante(id);
     }
 
     public Restaurante adicionar(Restaurante restaurante) {
         Optional<Cozinha> cozinha = cozinhaRepository.findById(restaurante.getCozinha().getId());
-        if(cozinha.isEmpty()) {
+        if (cozinha.isEmpty()) {
             throw new DataIntegrityViolationException("Cozinha não existente");
 
         }
@@ -54,12 +54,12 @@ public class RestauranteService {
         return restauranteRepository.save(restaurante);
     }
 
-    public void remover(Long id){
+    public void remover(Long id) {
         Restaurante restaurante = buscarRestaurante(id);
         restauranteRepository.delete(restaurante);
     }
 
-    public Restaurante atualizar(Long id, Restaurante model){
+    public Restaurante atualizar(Long id, Restaurante model) {
         Restaurante restaurante = buscarRestaurante(id);
 
         TypeMap<Restaurante, Restaurante> typeMap = modelMapper.createTypeMap(Restaurante.class, Restaurante.class);
@@ -73,15 +73,15 @@ public class RestauranteService {
         return adicionar(restaurante);
     }
 
-    public List<Restaurante> getTop2(String nome){
+    public List<Restaurante> getTop2(String nome) {
         return restauranteRepository.getTop2ByNomeContaining(nome);
     }
 
-    public int countByCozinhaId(Long id){
+    public int countByCozinhaId(Long id) {
         return restauranteRepository.countByCozinhaId(id);
     }
 
-    public List<Restaurante> buscaRestaurantesComFreteECozinhaY(Long cozinhaId){
+    public List<Restaurante> buscaRestaurantesComFreteECozinhaY(Long cozinhaId) {
         return restauranteRepository.buscaRestaurantesComFreteECozinhaY(cozinhaId);
     }
 }

@@ -1,7 +1,6 @@
 package algafood2api.domain.repository;
 
 import algafood2api.domain.model.Restaurante;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +18,10 @@ public interface RestauranteRepository extends CustomRepository<Restaurante, Lon
 
     //@Query("from Restaurante where taxaFrete > 0 and cozinha.id = :id")
     List<Restaurante> buscaRestaurantesComFreteECozinhaY(@Param("id") Long cozinha);
+
+    //Todo  - Anotar (Quando sabemos que vamos precisar de forma imediata, usamos fetch pra evitar consultas desnecessárias, caso contrário mantemos apenas o Join
+    // Visto que só será chamado quando necessário
+    @Query("from Restaurante r join fetch r.cozinha")
+    List<Restaurante> buscarTodos();
+
 }
