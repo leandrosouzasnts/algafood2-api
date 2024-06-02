@@ -33,16 +33,16 @@ public class RestauranteController {
 
     @GetMapping
     public ResponseEntity<List<Restaurante>> listarTodos(){
-        return ResponseEntity.ok(restauranteService.buscarTodos());
+        logger.info("find all step:start");
+        List<Restaurante> restaurantes = restauranteService.buscarTodos();
+        logger.info("find all step:end");
+        return ResponseEntity.ok(restaurantes);
+
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurante> buscarPorId(@PathVariable Long id){
-        try{
-            return ResponseEntity.ok(restauranteService.buscarPorId(id));
-        }catch (EntidadeNaoEncontradaException ex){
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(restauranteService.buscarPorId(id));
     }
 
     @PostMapping
