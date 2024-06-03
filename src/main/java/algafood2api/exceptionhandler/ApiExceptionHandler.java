@@ -17,10 +17,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<Object> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request) {
-        ApiException exDetail = ApiException.builder()
-                .timestamp(LocalDateTime.now())
-                .message(ex.getMessage())
-        .build();
+
+        ApiException exDetail = createApiExceptionBuilder(HttpStatus.NOT_FOUND, ApiExceptionType.ENTITY_NOT_FOUND, ex.getMessage()).build();
 
         return handleExceptionInternal(ex, exDetail, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
@@ -28,11 +26,34 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
 
-        ApiException expcetionDetail = ApiException.builder()
-                .timestamp(LocalDateTime.now())
-                .message(ex.getMessage())
-                .build();
+        if (body instanceof  String) {
+            body = ApiException.builder()
+                    .status(statusCode.value())
+                    .title((String) body)
+                    .detail(ex.getMessage())
+                    .timestamp(LocalDateTime.now())
+                    .build();
+        } else if (body instanceof ApiException){
+            body = ApiException.builder()
+                    .status(statusCode.value())
+                    .title(((ApiException) body).title())
+                    .detail(ex.getMessage())
+                    .timestamp(LocalDateTime.now())
+                    .build();
+        }
 
-        return super.handleExceptionInternal(ex, expcetionDetail, headers, statusCode, request);
+
+        return super.handleExceptionInternal(ex, body, headers, statusCode, request);
+    }
+
+    private ApiException.ApiExceptionBuilder createApiExceptionBuilder(HttpStatus status, ApiExceptionType type,
+                                                                       String detail){
+
+        return ApiException.builder()
+                .status(status.value())
+                .type(type.getUri())
+                .title(type.getTitle())
+                .detail(detail)
+                .timestamp(LocalDateTime.now());
     }
 }
