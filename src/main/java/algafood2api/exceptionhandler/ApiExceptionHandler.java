@@ -26,14 +26,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
 
-        if (body instanceof  String) {
+        if (body instanceof String) {
             body = ApiException.builder()
                     .status(statusCode.value())
                     .title((String) body)
                     .detail(ex.getMessage())
                     .timestamp(LocalDateTime.now())
                     .build();
-        } else if (body instanceof ApiException){
+        } else if (body instanceof ApiException) {
             body = ApiException.builder()
                     .status(statusCode.value())
                     .title(((ApiException) body).title())
@@ -47,7 +47,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ApiException.ApiExceptionBuilder createApiExceptionBuilder(HttpStatus status, ApiExceptionType type,
-                                                                       String detail){
+                                                                       String detail) {
 
         return ApiException.builder()
                 .status(status.value())

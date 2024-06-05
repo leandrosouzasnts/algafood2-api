@@ -2,7 +2,6 @@ package algafood2api.exceptionhandler;
 
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public enum ApiExceptionType {
