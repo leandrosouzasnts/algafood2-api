@@ -4,16 +4,18 @@ import algafood2api.domain.exceptions.EntidadeNaoEncontradaException;
 import algafood2api.domain.model.Restaurante;
 import algafood2api.domain.repository.RestauranteRepository;
 import algafood2api.domain.service.RestauranteService;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
-
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
@@ -87,16 +89,22 @@ public class RestauranteController {
     }
 
     private void merge(Map<String, Object> campos, Restaurante restaurante){
-        ObjectMapper objectMapper = new ObjectMapper();
-        Restaurante origem = objectMapper.convertValue(campos, Restaurante.class);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+            Restaurante origem = objectMapper.convertValue(campos, Restaurante.class);
 
-        campos.forEach((property, value) -> {
-            Field field = ReflectionUtils.findField(Restaurante.class, property);
-            field.setAccessible(true);
+            campos.forEach((property, value) -> {
+                Field field = ReflectionUtils.findField(Restaurante.class, property);
+                field.setAccessible(true);
 
-            Object valor = ReflectionUtils.getField(field, origem);
-            ReflectionUtils.setField(field, restaurante, valor);
-        });
+                Object valor = ReflectionUtils.getField(field, origem);
+                ReflectionUtils.setField(field, restaurante, valor);
+            });
+        } catch (IllegalArgumentException ex) {
+            Throwable rootCause = ExceptionUtils.getRootCause(ex);
+            throw new HttpMessageNotReadableException(ex.getMessage(), rootCause);
+        }
     }
 
     @GetMapping("/top2-nome")
