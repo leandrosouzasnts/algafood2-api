@@ -2,6 +2,8 @@ package algafood2api.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,10 +20,13 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "{field.name.restaurante}")
     private String nome;
 
     private BigDecimal taxaFrete;
 
+
+    @NotNull(groups = GroupsBeanValidation.CreatedCozinha.class)
     //@JsonIgnore
     @ManyToOne
     //@JsonIgnoreProperties("hibernateLazyInitializer")

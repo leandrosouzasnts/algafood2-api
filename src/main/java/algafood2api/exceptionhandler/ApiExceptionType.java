@@ -6,7 +6,8 @@ import lombok.Getter;
 @Getter
 public enum ApiExceptionType {
 
-    ENTITY_NOT_FOUND("/entidade-nao-encontrada", "Entidade não encontrada");
+    ENTITY_NOT_FOUND("/entidade-nao-encontrada", "Entidade não encontrada"),
+    INVALID_DATA("/invalid-data", "Invalid Data");
 
     private String uri;
     private String title;
